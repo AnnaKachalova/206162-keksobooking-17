@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анна Качалова](https://up.htmlacademy.ru/javascript/17/user/206162).
-* Наставник: `Неизвестно`.
+- Студент: [Анна Качалова](https://up.htmlacademy.ru/javascript/17/user/206162).
+- Наставник: [Лариса Клец](https://htmlacademy.ru/profile/id336227).
 
 ---
 
