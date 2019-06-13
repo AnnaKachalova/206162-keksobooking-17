@@ -7,10 +7,10 @@ var MAP_WIDTH = map.offsetWidth;
 var MAR_HEIGHT = map.offsetHeight;
 var types = ['palace', 'flat', 'house', 'bungalo'];
 
-var getRandom = function(min, max) {
+var getRandom = function (min, max) {
   return Math.random() * (max - min) + min;
 };
-var getRandomElement = function(arr) {
+var getRandomElement = function (arr) {
   var rand = Math.floor(Math.random() * arr.length);
   return arr[rand];
 };
@@ -35,7 +35,7 @@ for (var i = 1; i <= 8; i++) {
 document.querySelector('.map').classList.remove('map--faded');
 
 // render similar pins
-var fillTemplate = function(arrayObjects, template, wrapper) {
+var fillTemplate = function (arrayObjects, template, wrapper) {
   for (var j = 1; j <= arrayObjects.length; j++) {
     var currentPin = arrayObjects[j - 1];
     var element = template.cloneNode(true);
