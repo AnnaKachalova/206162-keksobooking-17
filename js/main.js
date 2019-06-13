@@ -4,7 +4,6 @@ var similarAdsNearBy = [];
 
 var map = document.querySelector('.map');
 var MAP_WIDTH = map.offsetWidth;
-var MAR_HEIGHT = map.offsetHeight;
 var types = ['palace', 'flat', 'house', 'bungalo'];
 
 var getRandom = function (min, max) {
