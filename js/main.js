@@ -4,6 +4,13 @@ var similarAdsNearBy = [];
 
 var map = document.querySelector('.map');
 var MAP_WIDTH = map.offsetWidth;
+var headerNames = [
+  'Жилой комплекс',
+  'Таунхаус',
+  'Малогабаритная квартира',
+  'Студия',
+  'Дачный дом с земельным участком',
+];
 var types = ['palace', 'flat', 'house', 'bungalo'];
 
 var getRandom = function (min, max) {
@@ -34,20 +41,31 @@ for (var i = 1; i <= 8; i++) {
 document.querySelector('.map').classList.remove('map--faded');
 
 // render similar pins
-var fillTemplate = function (arrayObjects, template, wrapper) {
+var fragment = document.createDocumentFragment();
+var PIN = document.querySelector('#pin');
+
+var fillTemplate = function (arrayObjects, template, area, fragment) {
   for (var j = 1; j <= arrayObjects.length; j++) {
     var currentPin = arrayObjects[j - 1];
     var element = template.cloneNode(true);
 
-    element.style = 'left:' + currentPin.location.x + 'px; top:' + currentPin.location.y + 'px';
+    var widthPin = PIN.offsetWidth;
+    var heightPin = PIN.offsetHeight;
+    var xPin = currentPin.location.x - widthPin / 2;
+    var yPin = currentPin.location.y - heightPin;
+
+    element.style = 'left:' + xPin + 'px; top:' + yPin + 'px';
 
     element.querySelector('img').src = currentPin.author.avatar;
-    element.querySelector('img').alt = '{{заголовок объявления}}';
+    element.querySelector('img').alt = getRandomElement(headerNames);
 
-    wrapper.appendChild(element);
+    fragment.appendChild(element);
   }
+  area.appendChild(fragment);
 };
 
-var similarAdTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var mapPoinst = document.querySelector('.map__pins');
-fillTemplate(similarAdsNearBy, similarAdTemplate, mapPoinst);
+var similarAdTemplate = PIN.content.querySelector('.map__pin');
+var areaForPoints = document.querySelector('.map__pins');
+
+areaForPoints.textContent = '';
+fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, fragment);
