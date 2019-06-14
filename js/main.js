@@ -1,7 +1,6 @@
 'use strict';
 // prepare data
 var similarAdsNearBy = [];
-
 var map = document.querySelector('.map');
 var MAP_WIDTH = map.offsetWidth;
 var headerNames = [
@@ -41,7 +40,7 @@ for (var i = 1; i <= 8; i++) {
 document.querySelector('.map').classList.remove('map--faded');
 
 // render similar pins
-var fragment = document.createDocumentFragment();
+var documentFragment = document.createDocumentFragment();
 var PIN = document.querySelector('#pin');
 
 var fillTemplate = function (arrayObjects, template, area, fragment) {
@@ -68,4 +67,4 @@ var similarAdTemplate = PIN.content.querySelector('.map__pin');
 var areaForPoints = document.querySelector('.map__pins');
 
 areaForPoints.textContent = '';
-fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, fragment);
+fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, documentFragment);
