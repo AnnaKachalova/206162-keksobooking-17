@@ -43,7 +43,7 @@ var mapFilterForm = document.querySelector('.map__filters');
 var mapFiltersFields = mapFilterForm.children;
 var mapPin = document.querySelector('.map__pin--main');
 
-for (var i = 0; i < mapFiltersFields.length; i++) {
+for (i = 0; i < mapFiltersFields.length; i++) {
   mapFiltersFields[i].disabled = 1;
 }
 
@@ -72,12 +72,12 @@ var onClickMapPin = function (evt) {
   adForm.classList.remove('ad-form--disabled');
 
   // активируем поля формы объявлений
-  for (var i = 0; i < adFormFields.length; i++) {
-    adFormFields[i].disabled = 0;
+  for (var j = 0; j < adFormFields.length; j++) {
+    adFormFields[j].disabled = 0;
   }
   // активируем поля формы фильтров
-  for (var i = 0; i < mapFiltersFields.length; i++) {
-    mapFiltersFields[i].disabled = 0;
+  for (var j = 0; j < mapFiltersFields.length; j++) {
+    mapFiltersFields[j].disabled = 0;
   }
   // заполняем метками
   removePins();
