@@ -76,7 +76,7 @@ var onClickMapPin = function (evt) {
     adFormFields[j].disabled = 0;
   }
   // активируем поля формы фильтров
-  for (var j = 0; j < mapFiltersFields.length; j++) {
+  for (j = 0; j < mapFiltersFields.length; j++) {
     mapFiltersFields[j].disabled = 0;
   }
   // заполняем метками
@@ -118,7 +118,7 @@ var fillTemplate = function (arrayObjects, template, area, fragment) {
 var removePins = function () {
   var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-  for (var i = 0; i < pins.length; i++) {
-    pins[i].parentNode.removeChild(pins[i]);
+  for (var k = 0; k < pins.length; k++) {
+    pins[k].parentNode.removeChild(pins[k]);
   }
 };
