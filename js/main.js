@@ -122,3 +122,41 @@ var removePins = function () {
     pins[k].parentNode.removeChild(pins[k]);
   }
 };
+
+// Работа с формами
+// Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
+var notice = document.querySelector('.notice');
+var fieldHousingType = notice.querySelector('#type');
+
+var onChangeSelect = function () {
+  var index = fieldHousingType.selectedIndex;
+  var selectedElement = fieldHousingType.options[index];
+  var price = notice.querySelector('#price');
+
+  var minValue = selectedElement.getAttribute('min');
+  price.setAttribute('value', minValue);
+  price.placeholder = minValue;
+};
+notice.addEventListener('change', onChangeSelect);
+
+// Поля «Время заезда», «Время выезда»
+var fieldTimein = notice.querySelector('#timein');
+var fieldTimeOut = notice.querySelector('#timeout');
+
+var onChangeTime = function (evt) {
+  // получаем тайм который изменили
+  var changedField = evt.target;
+  var changedValue = changedField.value;
+  var isTimeIn = changedField.id === 'timein';
+  var timeNeedToChange = isTimeIn ? fieldTimeOut : fieldTimein;
+
+  // и меняем другой
+  var options = timeNeedToChange.children;
+  for (var m = 0; m < options.length; m++) {
+    if (changedValue === options[m].value) {
+      options[m].selected = true;
+    }
+  }
+};
+fieldTimein.addEventListener('change', onChangeTime);
+fieldTimeOut.addEventListener('change', onChangeTime);
