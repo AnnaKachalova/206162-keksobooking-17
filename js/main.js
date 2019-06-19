@@ -137,7 +137,7 @@ var onChangeSelect = function () {
   price.min = parseInt(minValue, 10);
   price.placeholder = minValue;
 };
-notice.addEventListener('change', onChangeSelect);
+fieldHousingType.addEventListener('change', onChangeSelect);
 
 // Поля «Время заезда», «Время выезда»
 var fieldTimein = notice.querySelector('#timein');
