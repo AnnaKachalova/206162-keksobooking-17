@@ -3,14 +3,7 @@
 // prepare data
 var similarAdsNearBy = [];
 var map = document.querySelector('.map');
-var mapProp = {
-  width: map.offsetWidth,
-  height: map.offsetHeight,
-  left: map.offsetLeft,
-  top: map.offsetTop,
-  right: Number(map.offsetLeft) + Number(map.offsetWidth),
-  bottom: Number(map.offsetTop) + Number(map.offsetHeight),
-};
+var MAP_WIDTH = map.offsetWidth;
 
 var headerNames = [
   'Жилой комплекс',
@@ -39,7 +32,7 @@ for (var i = 1; i <= 8; i++) {
     },
 
     location: {
-      x: getRandom(0, mapProp.width),
+      x: getRandom(0, MAP_WIDTH),
       y: getRandom(130, 630),
     },
   };
@@ -61,13 +54,15 @@ var MAP_PIN_HEIGHT = mapPin.offsetHeight;
 var MAP_PIN_LEFT = mapPin.offsetLeft;
 var MAP_PIN_TOP = mapPin.offsetTop;
 
-var setAddress = function (coordinates) {
-  document.querySelector('#address').value = coordinates;
+var setAddress = function (coord) {
+  var addressY = coord.y + MAP_PIN_HEIGHT;
+  var addressX = coord.x + MAP_PIN_WIDTH / 2;
+  document.querySelector('#address').value = addressY + ' ,' + addressX;
 };
-var startСoordinates =
-  Math.round(MAP_PIN_WIDTH / 2 + MAP_PIN_LEFT) +
-  ', ' +
-  Math.round(MAP_PIN_HEIGHT / 2 + MAP_PIN_TOP);
+var startСoordinates = {
+  y: parseInt(MAP_PIN_WIDTH / 2 + MAP_PIN_LEFT, 10),
+  x: parseInt(MAP_PIN_HEIGHT / 2 + MAP_PIN_TOP, 10),
+};
 
 setAddress(startСoordinates);
 
@@ -106,29 +101,47 @@ var onMouseDownHolder = function (evt) {
 
   var onMouseMoveHolder = function (moveEvt) {
     moveEvt.preventDefault();
+    var limits = {
+      top: 130 - MAP_PIN_HEIGHT,
+      bottom: 630,
+      left: 0,
+      right: map.offsetWidth - MAP_PIN_WIDTH, // или половину ширины пина
+    };
 
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY,
     };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY,
+    };
+    mapPin.style.top = mapPin.offsetTop - shift.y + 'px';
+    mapPin.style.left = mapPin.offsetLeft - shift.x + 'px';
+
+    // ограничим движение вверх
+    if (mapPin.offsetTop - shift.y < limits.top) {
+      mapPin.style.top = limits.top + 'px';
+    }
+    // ограничим движение вниз
+    if (mapPin.offsetTop - shift.y > limits.bottom) {
+      mapPin.style.top = limits.bottom + 'px';
+    }
+    // ограничим движение слева
+    if (mapPin.offsetLeft - shift.x < limits.left) {
+      mapPin.style.left = limits.left + 'px';
+    }
+    // ограничим движение справа
+    if (mapPin.offsetLeft - shift.x > limits.right) {
+      mapPin.style.left = limits.right + 'px';
+    }
 
     // заполняем адрес координатами
-    var postСlickСoordinates = Math.round(moveEvt.clientX) + ', ' + Math.round(moveEvt.clientY);
+    var postСlickСoordinates = {
+      y: parseInt(mapPin.style.left, 10),
+      x: parseInt(mapPin.style.top, 10),
+    };
     setAddress(postСlickСoordinates);
-
-    if (
-      moveEvt.clientY > mapProp.top &&
-      moveEvt.clientY < mapProp.bottom &&
-      moveEvt.clientX > mapProp.left &&
-      moveEvt.clientX < mapProp.right
-    ) {
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY,
-      };
-      mapPin.style.top = mapPin.offsetTop - shift.y + 'px';
-      mapPin.style.left = mapPin.offsetLeft - shift.x + 'px';
-    }
   };
 
   var onMouseUpHolder = function (upEvt) {
@@ -142,7 +155,10 @@ var onMouseDownHolder = function (evt) {
     fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, documentFragment);
 
     // заполняем адрес координатами
-    var postСlickСoordinates = Math.round(upEvt.clientX) + ', ' + Math.round(upEvt.clientY);
+    var postСlickСoordinates = {
+      y: parseInt(mapPin.style.left, 10),
+      x: parseInt(mapPin.style.top, 10),
+    };
     setAddress(postСlickСoordinates);
   };
   document.addEventListener('mousemove', onMouseMoveHolder);
