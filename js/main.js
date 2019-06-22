@@ -21,10 +21,10 @@ var headerNames = [
 ];
 var types = ['palace', 'flat', 'house', 'bungalo'];
 
-var getRandom = function(min, max) {
+var getRandom = function (min, max) {
   return Math.random() * (max - min) + min;
 };
-var getRandomElement = function(arr) {
+var getRandomElement = function (arr) {
   var rand = Math.floor(Math.random() * arr.length);
   return arr[rand];
 };
@@ -61,7 +61,7 @@ var MAP_PIN_HEIGHT = mapPin.offsetHeight;
 var MAP_PIN_LEFT = mapPin.offsetLeft;
 var MAP_PIN_TOP = mapPin.offsetTop;
 
-var setAddress = function(coordinates) {
+var setAddress = function (coordinates) {
   document.querySelector('#address').value = coordinates;
 };
 var startСoordinates =
@@ -72,7 +72,7 @@ var startСoordinates =
 setAddress(startСoordinates);
 
 // Функция активации страницы
-var activatePage = function() {
+var activatePage = function () {
   var adForm = document.querySelector('.ad-form');
   var adFormFields = adForm.children;
 
@@ -90,7 +90,7 @@ var activatePage = function() {
 };
 console.log(mapProp);
 // Обработчк перетаскивания
-var onMouseDownHolder = function(evt) {
+var onMouseDownHolder = function (evt) {
   // Проверяем что страница неактивна если это так то активируем
   var pageIsNotActived = map.classList.contains('map--faded');
   if (pageIsNotActived) {
@@ -105,19 +105,14 @@ var onMouseDownHolder = function(evt) {
     y: evt.clientY,
   };
 
-  var onMouseMoveHolder = function(moveEvt) {
+  var onMouseMoveHolder = function (moveEvt) {
     moveEvt.preventDefault();
 
     var shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY,
     };
-    /*
-    const pos = moveEvt.target.getBoundingClientRect();
 
-    // пробовала добавлять такое сравнение но он пин сверху
-    pos.top > mapProp.top + 5 &&
-*/
     // заполняем адрес координатами
     var postСlickСoordinates = Math.round(moveEvt.clientX) + ', ' + Math.round(moveEvt.clientY);
     setAddress(postСlickСoordinates);
@@ -137,7 +132,7 @@ var onMouseDownHolder = function(evt) {
     }
   };
 
-  var onMouseUpHolder = function(upEvt) {
+  var onMouseUpHolder = function (upEvt) {
     upEvt.preventDefault();
 
     document.removeEventListener('mousemove', onMouseMoveHolder);
@@ -162,7 +157,7 @@ var pin = document.querySelector('#pin');
 var similarAdTemplate = pin.content.querySelector('.map__pin');
 var areaForPoints = document.querySelector('.map__pins');
 
-var fillTemplate = function(arrayObjects, template, area, fragment) {
+var fillTemplate = function (arrayObjects, template, area, fragment) {
   for (var j = 1; j <= arrayObjects.length; j++) {
     var currentPin = arrayObjects[j - 1];
     var element = template.cloneNode(true);
@@ -181,7 +176,7 @@ var fillTemplate = function(arrayObjects, template, area, fragment) {
   }
   area.appendChild(fragment);
 };
-var removePins = function() {
+var removePins = function () {
   var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
   for (var k = 0; k < pins.length; k++) {
@@ -195,7 +190,7 @@ var notice = document.querySelector('.notice');
 var fieldHousingType = notice.querySelector('#type');
 var minValuesForPrice = [0, 1000, 5000, 10000];
 
-var onChangeSelect = function() {
+var onChangeSelect = function () {
   var index = fieldHousingType.selectedIndex;
   var price = notice.querySelector('#price');
   var minValue = minValuesForPrice[index];
@@ -209,7 +204,7 @@ fieldHousingType.addEventListener('change', onChangeSelect);
 var fieldTimein = notice.querySelector('#timein');
 var fieldTimeOut = notice.querySelector('#timeout');
 
-var onChangeTime = function(evt) {
+var onChangeTime = function (evt) {
   var changedField = evt.target;
   var isTimeIn = changedField.id === 'timein';
   var timeNeedToChange = isTimeIn ? fieldTimeOut : fieldTimein;
