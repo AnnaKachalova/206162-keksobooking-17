@@ -88,13 +88,12 @@ var activatePage = function () {
     mapFiltersFields[j].disabled = 0;
   }
 };
-console.log(mapProp);
+
 // Обработчк перетаскивания
 var onMouseDownHolder = function (evt) {
   // Проверяем что страница неактивна если это так то активируем
   var pageIsNotActived = map.classList.contains('map--faded');
   if (pageIsNotActived) {
-    console.log('Активируем страницу');
     activatePage();
   }
 
