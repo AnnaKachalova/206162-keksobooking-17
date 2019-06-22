@@ -3,7 +3,15 @@
 // prepare data
 var similarAdsNearBy = [];
 var map = document.querySelector('.map');
-var MAP_WIDTH = map.offsetWidth;
+var mapProp = {
+  width: map.offsetWidth,
+  height: map.offsetHeight,
+  left: map.offsetLeft,
+  top: map.offsetTop,
+  right: Number(map.offsetLeft) + Number(map.offsetWidth),
+  bottom: Number(map.offsetTop) + Number(map.offsetHeight),
+};
+
 var headerNames = [
   'Жилой комплекс',
   'Таунхаус',
@@ -13,10 +21,10 @@ var headerNames = [
 ];
 var types = ['palace', 'flat', 'house', 'bungalo'];
 
-var getRandom = function (min, max) {
+var getRandom = function(min, max) {
   return Math.random() * (max - min) + min;
 };
-var getRandomElement = function (arr) {
+var getRandomElement = function(arr) {
   var rand = Math.floor(Math.random() * arr.length);
   return arr[rand];
 };
@@ -31,7 +39,7 @@ for (var i = 1; i <= 8; i++) {
     },
 
     location: {
-      x: getRandom(0, MAP_WIDTH),
+      x: getRandom(0, mapProp.width),
       y: getRandom(130, 630),
     },
   };
@@ -53,7 +61,7 @@ var MAP_PIN_HEIGHT = mapPin.offsetHeight;
 var MAP_PIN_LEFT = mapPin.offsetLeft;
 var MAP_PIN_TOP = mapPin.offsetTop;
 
-var setAddress = function (coordinates) {
+var setAddress = function(coordinates) {
   document.querySelector('#address').value = coordinates;
 };
 var startСoordinates =
@@ -63,12 +71,12 @@ var startСoordinates =
 
 setAddress(startСoordinates);
 
-// Активация страницы
-var onClickMapPin = function (evt) {
+// Функция активации страницы
+var activatePage = function() {
   var adForm = document.querySelector('.ad-form');
   var adFormFields = adForm.children;
 
-  document.querySelector('.map').classList.remove('map--faded');
+  map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
 
   // активируем поля формы объявлений
@@ -79,16 +87,74 @@ var onClickMapPin = function (evt) {
   for (j = 0; j < mapFiltersFields.length; j++) {
     mapFiltersFields[j].disabled = 0;
   }
-  // заполняем метками
-  removePins();
-  fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, documentFragment);
-
-  // заполняем адрес координатами
-  var postСlickСoordinates = Math.round(evt.clientX) + ', ' + Math.round(evt.clientY);
-
-  setAddress(postСlickСoordinates);
 };
-mapPin.addEventListener('click', onClickMapPin);
+console.log(mapProp);
+// Обработчк перетаскивания
+var onMouseDownHolder = function(evt) {
+  // Проверяем что страница неактивна если это так то активируем
+  var pageIsNotActived = map.classList.contains('map--faded');
+  if (pageIsNotActived) {
+    console.log('Активируем страницу');
+    activatePage();
+  }
+
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY,
+  };
+
+  var onMouseMoveHolder = function(moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY,
+    };
+    /*
+    const pos = moveEvt.target.getBoundingClientRect();
+
+    // пробовала добавлять такое сравнение но он пин сверху
+    pos.top > mapProp.top + 5 &&
+*/
+    // заполняем адрес координатами
+    var postСlickСoordinates = Math.round(moveEvt.clientX) + ', ' + Math.round(moveEvt.clientY);
+    setAddress(postСlickСoordinates);
+
+    if (
+      moveEvt.clientY > mapProp.top &&
+      moveEvt.clientY < mapProp.bottom &&
+      moveEvt.clientX > mapProp.left &&
+      moveEvt.clientX < mapProp.right
+    ) {
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY,
+      };
+      mapPin.style.top = mapPin.offsetTop - shift.y + 'px';
+      mapPin.style.left = mapPin.offsetLeft - shift.x + 'px';
+    }
+  };
+
+  var onMouseUpHolder = function(upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMoveHolder);
+    document.removeEventListener('mouseup', onMouseUpHolder);
+
+    // заполняем метками
+    removePins();
+    fillTemplate(similarAdsNearBy, similarAdTemplate, areaForPoints, documentFragment);
+
+    // заполняем адрес координатами
+    var postСlickСoordinates = Math.round(upEvt.clientX) + ', ' + Math.round(upEvt.clientY);
+    setAddress(postСlickСoordinates);
+  };
+  document.addEventListener('mousemove', onMouseMoveHolder);
+  document.addEventListener('mouseup', onMouseUpHolder);
+};
+mapPin.addEventListener('mousedown', onMouseDownHolder);
 
 // подготовка данных к выводу других меток (похожих)
 var documentFragment = document.createDocumentFragment();
@@ -96,7 +162,7 @@ var pin = document.querySelector('#pin');
 var similarAdTemplate = pin.content.querySelector('.map__pin');
 var areaForPoints = document.querySelector('.map__pins');
 
-var fillTemplate = function (arrayObjects, template, area, fragment) {
+var fillTemplate = function(arrayObjects, template, area, fragment) {
   for (var j = 1; j <= arrayObjects.length; j++) {
     var currentPin = arrayObjects[j - 1];
     var element = template.cloneNode(true);
@@ -115,7 +181,7 @@ var fillTemplate = function (arrayObjects, template, area, fragment) {
   }
   area.appendChild(fragment);
 };
-var removePins = function () {
+var removePins = function() {
   var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
   for (var k = 0; k < pins.length; k++) {
@@ -129,7 +195,7 @@ var notice = document.querySelector('.notice');
 var fieldHousingType = notice.querySelector('#type');
 var minValuesForPrice = [0, 1000, 5000, 10000];
 
-var onChangeSelect = function () {
+var onChangeSelect = function() {
   var index = fieldHousingType.selectedIndex;
   var price = notice.querySelector('#price');
   var minValue = minValuesForPrice[index];
@@ -143,7 +209,7 @@ fieldHousingType.addEventListener('change', onChangeSelect);
 var fieldTimein = notice.querySelector('#timein');
 var fieldTimeOut = notice.querySelector('#timeout');
 
-var onChangeTime = function (evt) {
+var onChangeTime = function(evt) {
   var changedField = evt.target;
   var isTimeIn = changedField.id === 'timein';
   var timeNeedToChange = isTimeIn ? fieldTimeOut : fieldTimein;
