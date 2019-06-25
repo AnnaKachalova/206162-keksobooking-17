@@ -22,6 +22,6 @@
         y: window.util.getRandomNum(130, 630),
       },
     };
-    similarAdsNearBy.push(similarAd);
+    window.similarAdsNearBy.push(similarAd);
   }
 })();
