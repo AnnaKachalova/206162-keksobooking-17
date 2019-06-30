@@ -114,7 +114,7 @@
 
       // заполняем метками
       window.controlPins.removePins();
-      window.controlPins.createPins();
+      window.backend.load(window.controlPins.createPins, window.controlPins.showErrorMessage);
 
       // заполняем адрес координатами
       var postСlickСoordinates = {

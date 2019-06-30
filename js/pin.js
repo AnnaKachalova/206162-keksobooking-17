@@ -6,19 +6,10 @@
   var similarAdTemplate = pin.content.querySelector('.map__pin');
   var areaForPoints = document.querySelector('.map__pins');
 
-  var headerNames = [
-    'Жилой комплекс',
-    'Таунхаус',
-    'Малогабаритная квартира',
-    'Студия',
-    'Дачный дом с земельным участком',
-  ];
-  var arrayObjects = window.similarAdsNearBy;
-
   window.controlPins = {
-    createPins: function () {
-      for (var j = 1; j <= arrayObjects.length; j++) {
-        var currentPin = arrayObjects[j - 1];
+    createPins: function (similarAds) {
+      for (var j = 1; j <= 10; j++) {
+        var currentPin = similarAds[j - 1];
         var element = similarAdTemplate.cloneNode(true);
 
         var widthPin = pin.offsetWidth;
@@ -29,11 +20,18 @@
         element.style = 'left:' + xPin + 'px; top:' + yPin + 'px';
 
         element.querySelector('img').src = currentPin.author.avatar;
-        element.querySelector('img').alt = window.util.getRandomElement(headerNames);
+        element.querySelector('img').alt = currentPin.offer.title;
 
         documentFragment.appendChild(element);
       }
       areaForPoints.appendChild(documentFragment);
+    },
+    showErrorMessage: function (message) {
+      var errorWrapper = document.createElement('div');
+      errorWrapper.classList.add('error_wrapper');
+
+      errorWrapper.textContent = message;
+      document.querySelector('body').appendChild(errorWrapper);
     },
     removePins: function () {
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
