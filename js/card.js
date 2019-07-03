@@ -25,7 +25,6 @@
   window.controlCard = {
     createCard: function (data) {
       data.slice(0, 1).forEach(function (ads) {
-        console.log(ads);
         var element = similarCardTemplate.cloneNode(true);
 
         // filling the fields
@@ -42,13 +41,13 @@
         fillText('.popup__text--capacity', ads.offer.rooms + ' комнаты для ' + ads.offer.guests);
 
         fillText(
-          '.popup__text--capacity',
-          ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
+            '.popup__text--capacity',
+            ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
         );
         fillText('.popup__text--time', ads.offer.checkin + ', выезд до ' + ads.offer.checkout);
         fillText('.popup__description', ads.offer.description);
 
-        //features
+        // features
         var featuresBlock = element.querySelector('.popup__features');
         featuresBlock.textContent = '';
 
@@ -60,7 +59,7 @@
           featuresBlock.appendChild(li);
         });
 
-        //photos
+        // photos
         var photoBlock = element.querySelector('.popup__photos');
         photoBlock.textContent = '';
 

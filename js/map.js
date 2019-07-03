@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function () {
   // Блокируем форму с фильтрами добавляя состояние disabled полям
   var map = document.querySelector('.map');
   var mapFilterForm = document.querySelector('.map__filters');
@@ -16,7 +16,7 @@
   var MAP_PIN_LEFT = mapPin.offsetLeft;
   var MAP_PIN_TOP = mapPin.offsetTop;
 
-  var setAddress = function(coord) {
+  var setAddress = function (coord) {
     var addressY = coord.y + MAP_PIN_HEIGHT;
     var addressX = coord.x + MAP_PIN_WIDTH / 2;
     document.querySelector('#address').value = addressY + ' ,' + addressX;
@@ -29,7 +29,7 @@
   setAddress(startСoordinates);
 
   // Функция активации страницы
-  var activatePage = function() {
+  var activatePage = function () {
     var adForm = document.querySelector('.ad-form');
     var adFormFields = adForm.children;
 
@@ -47,7 +47,7 @@
   };
 
   // Обработчк перетаскивания
-  var onMouseDownHolder = function(evt) {
+  var onMouseDownHolder = function (evt) {
     // Проверяем что страница неактивна если это так то активируем
     var pageIsNotActived = map.classList.contains('map--faded');
     if (pageIsNotActived) {
@@ -56,14 +56,14 @@
 
     evt.preventDefault();
 
-    var Coordinate = function(x, y) {
+    var Coordinate = function (x, y) {
       this.x = x;
       this.y = y;
     };
 
     var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
-    var onMouseMoveHolder = function(moveEvt) {
+    var onMouseMoveHolder = function (moveEvt) {
       moveEvt.preventDefault();
       var limits = {
         top: 130 - MAP_PIN_HEIGHT,
@@ -107,7 +107,7 @@
       setAddress(postСlickСoordinates);
     };
 
-    var onMouseUpHolder = function(upEvt) {
+    var onMouseUpHolder = function (upEvt) {
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMoveHolder);
