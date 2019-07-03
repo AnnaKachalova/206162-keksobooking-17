@@ -5,17 +5,17 @@
   var pin = document.querySelector('#pin');
   var similarAdTemplate = pin.content.querySelector('.map__pin');
   var areaForPoints = document.querySelector('.map__pins');
-  var firstUpdate = true;
   var similarAds = [];
 
   window.controlPins = {
     successHalder: function (data) {
       similarAds = data;
+
       window.controlPins.updatePins();
+      window.controlCard.createCard(similarAds);
     },
     createPins: function (array) {
       array.slice(0, 5).forEach(function (ads) {
-
         var element = similarAdTemplate.cloneNode(true);
         var widthPin = pin.offsetWidth;
         var heightPin = pin.offsetHeight;
@@ -33,25 +33,19 @@
     },
     updatePins: function () {
       var similarAdsSorted = [];
+      similarAdsSorted = similarAds;
 
-      // Фильтруем только со второго обновления
-      if (firstUpdate) {
-        firstUpdate = false;
-        similarAdsSorted = similarAds;
-      } else {
-        // Удаляем все пины
-        this.removePins();
+      // Удаляем все пины
+      this.removePins();
 
-        var typeOfHousing = document.querySelector('#housing-type').value;
+      var typeOfHousing = document.querySelector('#housing-type').value;
 
-        if (typeOfHousing !== 'any') {
-          similarAdsSorted = similarAds.filter(function (ads) {
-            return ads.offer.type === typeOfHousing;
-          });
-        } else {
-          similarAdsSorted = similarAds;
-        }
+      if (typeOfHousing !== 'any') {
+        similarAdsSorted = similarAds.filter(function (ads) {
+          return ads.offer.type === typeOfHousing;
+        });
       }
+
       this.createPins(similarAdsSorted);
     },
     showErrorMessage: function (message) {
