@@ -5,26 +5,55 @@
   var pin = document.querySelector('#pin');
   var similarAdTemplate = pin.content.querySelector('.map__pin');
   var areaForPoints = document.querySelector('.map__pins');
+  var firstUpdate = true;
+  var similarAds = [];
 
   window.controlPins = {
-    createPins: function (similarAds) {
-      for (var j = 1; j <= 10; j++) {
-        var currentPin = similarAds[j - 1];
-        var element = similarAdTemplate.cloneNode(true);
+    successHalder: function (data) {
+      similarAds = data;
+      window.controlPins.updatePins();
+    },
+    createPins: function (array) {
+      array.slice(0, 5).forEach(function (ads, j) {
+        console.log(ads.offer.type);
 
+        var element = similarAdTemplate.cloneNode(true);
         var widthPin = pin.offsetWidth;
         var heightPin = pin.offsetHeight;
-        var xPin = currentPin.location.x - widthPin / 2;
-        var yPin = currentPin.location.y - heightPin;
+        var xPin = ads.location.x - widthPin / 2;
+        var yPin = ads.location.y - heightPin;
 
         element.style = 'left:' + xPin + 'px; top:' + yPin + 'px';
 
-        element.querySelector('img').src = currentPin.author.avatar;
-        element.querySelector('img').alt = currentPin.offer.title;
+        element.querySelector('img').src = ads.author.avatar;
+        element.querySelector('img').alt = ads.offer.title;
 
         documentFragment.appendChild(element);
-      }
+      });
       areaForPoints.appendChild(documentFragment);
+    },
+    updatePins: function () {
+      var similarAdsSorted = [];
+
+      // Фильтруем только со второго обновления
+      if (firstUpdate) {
+        firstUpdate = false;
+        similarAdsSorted = similarAds;
+      } else {
+        // Удаляем все пины
+        this.removePins();
+
+        var typeOfHousing = document.querySelector('#housing-type').value;
+
+        if (typeOfHousing !== 'any') {
+          similarAdsSorted = similarAds.filter(function (ads) {
+            return ads.offer.type === typeOfHousing;
+          });
+        } else {
+          similarAdsSorted = similarAds;
+        }
+      }
+      this.createPins(similarAdsSorted);
     },
     showErrorMessage: function (message) {
       var errorWrapper = document.createElement('div');
@@ -36,9 +65,9 @@
     removePins: function () {
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-      for (var k = 0; k < pins.length; k++) {
-        pins[k].parentNode.removeChild(pins[k]);
-      }
+      pins.forEach(function (pin) {
+        pin.parentNode.removeChild(pin);
+      });
     },
   };
 })();
