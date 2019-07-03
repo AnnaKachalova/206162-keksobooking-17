@@ -10,6 +10,4 @@
     window.controlPins.updatePins();
   };
   typeOfHousingField.addEventListener('change', onTypeOfHousingChange);
-
-  
 })();

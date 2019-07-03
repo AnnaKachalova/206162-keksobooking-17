@@ -64,8 +64,8 @@
     removePins: function () {
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
-      pins.forEach(function (pin) {
-        pin.parentNode.removeChild(pin);
+      pins.forEach(function (currentPin) {
+        currentPin.parentNode.removeChild(currentPin);
       });
     },
   };
