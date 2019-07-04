@@ -136,6 +136,4 @@
     evt.preventDefault();
     window.disabledPage();
   });
-
-  
 })();
