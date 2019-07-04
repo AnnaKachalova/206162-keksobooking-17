@@ -6,6 +6,9 @@
   var similarAdTemplate = pin.content.querySelector('.map__pin');
   var areaForPoints = document.querySelector('.map__pins');
   var similarAds = [];
+  var errorMessageIsShown = false;
+  var error = document.querySelector('#error');
+  var errorTemplate = error.content.querySelector('.error');
 
   window.controlPins = {
     successHalder: function (data) {
@@ -55,11 +58,32 @@
       this.createPins(similarAdsSorted);
     },
     showErrorMessage: function (message) {
-      var errorWrapper = document.createElement('div');
-      errorWrapper.classList.add('error_wrapper');
+      var element = errorTemplate.cloneNode(true);
+      element.querySelector('.error__message').textContent = message;
+      var resetButton = element.querySelector('.error__button');
+      document.querySelector('main').appendChild(element);
 
-      errorWrapper.textContent = message;
-      document.querySelector('body').appendChild(errorWrapper);
+      // События для скрытия сообщения
+      var hideErrorMessage = function () {
+        element.parentNode.removeChild(element);
+        element.removeEventListener('click', onElementClick);
+        document.removeEventListener('keydown', onDocumentKeydown);
+        resetButton.removeEventListener('click', onResetButtonClick);
+        window.disabledPage();
+      };
+
+      var onElementClick = function () {
+        hideErrorMessage();
+      };
+      var onResetButtonClick = function () {
+        hideErrorMessage();
+      };
+      var onDocumentKeydown = function (evt) {
+        window.util.isEscEvent(evt, hideErrorMessage);
+      };
+      element.addEventListener('click', onElementClick);
+      document.addEventListener('keydown', onDocumentKeydown);
+      resetButton.addEventListener('click', onResetButtonClick);
     },
     removePins: function () {
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');

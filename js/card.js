@@ -93,15 +93,15 @@
       });
 
       document.addEventListener('keydown', function (evt) {
-        if (hasCard) {
-          window.util.isEscEvent(evt, window.controlCard.removeCard);
-        }
+        window.util.isEscEvent(evt, window.controlCard.removeCard);
       });
     },
     removeCard: function () {
-      var adsBlock = document.querySelector('.map__card');
-      hasCard = false;
-      adsBlock.parentNode.removeChild(adsBlock);
+      if (hasCard) {
+        var adsBlock = document.querySelector('.map__card');
+        hasCard = false;
+        adsBlock.parentNode.removeChild(adsBlock);
+      }
     },
   };
 })();
