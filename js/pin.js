@@ -8,6 +8,7 @@
   var similarAds = [];
   var error = document.querySelector('#error');
   var errorTemplate = error.content.querySelector('.error');
+  var lastTimeout;
 
   window.controlPins = {
     successHalder: function (data) {
@@ -41,20 +42,62 @@
     },
     updatePins: function () {
       var similarAdsSorted = [];
+      var priceGradation = {
+        any: [0],
+        low: [0, 10000],
+        middle: [10000, 50000],
+        high: [50000],
+      };
       similarAdsSorted = similarAds;
 
-      // Удаляем все пины
-      this.removePins();
-
-      var typeOfHousing = document.querySelector('#housing-type').value;
-
-      if (typeOfHousing !== 'any') {
-        similarAdsSorted = similarAds.filter(function (ads) {
-          return ads.offer.type === typeOfHousing;
-        });
+      // Устраняем дребезг
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
       }
+      lastTimeout = window.setTimeout(function () {
+        // Удаляем все пины
+        window.controlPins.removePins();
 
-      this.createPins(similarAdsSorted);
+        var typeOfHousing = document.querySelector('#housing-type').value;
+        var priceField = document.querySelector('#housing-price').value;
+        var roomsField = document.querySelector('#housing-rooms').value;
+        var guestsField = document.querySelector('#housing-guests').value;
+
+        // Фильтруем по типу
+        if (typeOfHousing !== 'any') {
+          similarAdsSorted = similarAds.filter(function (ads) {
+            return ads.offer.type === typeOfHousing;
+          });
+        }
+        // Фильтруем по цене
+        if (priceField !== 'any') {
+          similarAdsSorted = similarAdsSorted.filter(function (ads) {
+            // проверяем что есть верхний предел
+            var range = priceGradation[priceField];
+            var minPrice = range[0];
+
+            if (range[1]) {
+              var maxPrice = range[1];
+              return minPrice < ads.offer.price < maxPrice;
+            } else {
+              return minPrice < ads.offer.price;
+            }
+          });
+        }
+        // Фильтруем по кол-ву комнат
+        if (roomsField !== 'any') {
+          similarAdsSorted = similarAdsSorted.filter(function (ads) {
+            return ads.offer.rooms === Number(roomsField);
+          });
+        }
+        // Фильтруем по кол-ву гостей
+        if (guestsField !== 'any') {
+          similarAdsSorted = similarAdsSorted.filter(function (ads) {
+            return ads.offer.guests === Number(guestsField);
+          });
+        }
+        window.controlPins.createPins(similarAdsSorted);
+      }, 500);
     },
     showErrorMessage: function (message) {
       var element = errorTemplate.cloneNode(true);
