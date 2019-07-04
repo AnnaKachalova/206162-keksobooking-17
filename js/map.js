@@ -6,10 +6,6 @@
   var mapFiltersFields = mapFilterForm.children;
   var mapPin = document.querySelector('.map__pin--main');
 
-  for (var i = 0; i < mapFiltersFields.length; i++) {
-    mapFiltersFields[i].disabled = 1;
-  }
-
   // Заполняем адрес текущими координатами метки
   var MAP_PIN_WIDTH = mapPin.offsetWidth;
   var MAP_PIN_HEIGHT = mapPin.offsetHeight;
@@ -26,7 +22,35 @@
     x: parseInt(MAP_PIN_HEIGHT / 2 + MAP_PIN_TOP, 10),
   };
 
-  setAddress(startСoordinates);
+  // Возвращаем метку адреса в исходное положение и указываем начальный адрес
+  window.setPinToStartPosition = function () {
+    setAddress(startСoordinates);
+    mapPin.style.top = MAP_PIN_TOP + 'px';
+    mapPin.style.left = MAP_PIN_LEFT + 'px';
+  };
+
+  window.setPinToStartPosition();
+
+  // Функция дизейбла страницы
+  window.disabledPage = function () {
+    // Очищаем поля формы публикации и дизейблим ее
+    var formPublish = document.querySelector('.ad-form');
+    formPublish.reset();
+    formPublish.classList.add('ad-form--disabled');
+
+    window.disabledAdForm();
+    window.disabledFilterForm();
+
+    // Дизейблим map
+    map.classList.add('map--faded');
+    // Удаляем метки
+    window.controlPins.removePins();
+    // Удаляем карту объявлений
+    window.controlCard.removeCard();
+    // Возвращаем метку адреса в исходное положение и указываем адрес
+    window.setPinToStartPosition();
+  };
+  window.disabledPage();
 
   // Функция активации страницы
   var activatePage = function () {
@@ -56,10 +80,12 @@
 
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY,
+    var Coordinate = function (x, y) {
+      this.x = x;
+      this.y = y;
     };
+
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var onMouseMoveHolder = function (moveEvt) {
       moveEvt.preventDefault();
@@ -67,17 +93,16 @@
         top: 130 - MAP_PIN_HEIGHT,
         bottom: 630,
         left: 0,
-        right: map.offsetWidth - MAP_PIN_WIDTH, // или половину ширины пина
+        right: map.offsetWidth - MAP_PIN_WIDTH,
       };
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY,
       };
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY,
-      };
+
+      startCoords = new Coordinate(moveEvt.clientX, moveEvt.clientY);
+
       mapPin.style.top = mapPin.offsetTop - shift.y + 'px';
       mapPin.style.left = mapPin.offsetLeft - shift.x + 'px';
 

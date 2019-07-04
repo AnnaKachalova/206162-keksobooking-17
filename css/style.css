@@ -1248,7 +1248,40 @@ fieldset {
   top: 120px;
   width: auto;
   height: 100px;
-  background: red;
+  background: crimson;
   position: absolute;
   padding: 20px;
+  font-size: 24px;
+  border-radius: 5px;
+}
+.error_wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding-top: 300px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.error_wrapper .error_message {
+  position: relative;
+  color: #ffffff;
+  font-size: 50px;
+  font-weight: 700;
+}
+.error_wrapper .reset_button {
+  padding: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  box-sizing: content-box;
+  color: white;
+  border: 4px solid #ff5635;
+  background-color: #ff5635;
+  border-radius: 8px;
 }
