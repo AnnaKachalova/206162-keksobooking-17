@@ -28,7 +28,6 @@
 
         element.querySelector('img').src = ads.author.avatar;
         element.querySelector('img').alt = ads.offer.title;
-        element.setAttribute('data-index', index);
 
         documentFragment.appendChild(element);
 
