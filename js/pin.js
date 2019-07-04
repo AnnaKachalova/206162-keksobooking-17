@@ -12,10 +12,10 @@
       similarAds = data;
 
       window.controlPins.updatePins();
-      window.controlCard.createCard(similarAds);
+      //window.controlCard.createCard(similarAds);
     },
     createPins: function (array) {
-      array.slice(0, 5).forEach(function (ads) {
+      array.slice(0, 5).forEach(function (ads, index) {
         var element = similarAdTemplate.cloneNode(true);
         var widthPin = pin.offsetWidth;
         var heightPin = pin.offsetHeight;
@@ -26,8 +26,15 @@
 
         element.querySelector('img').src = ads.author.avatar;
         element.querySelector('img').alt = ads.offer.title;
+        element.setAttribute('data-index', index);
 
         documentFragment.appendChild(element);
+
+        // События работы с объявлением
+        // открытие
+        element.addEventListener('click', function () {
+          window.controlCard.createCard(ads);
+        });
       });
       areaForPoints.appendChild(documentFragment);
     },
