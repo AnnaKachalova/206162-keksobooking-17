@@ -42,7 +42,6 @@
     window.disabledFilterForm();
 
     // Дизейблим map
-    var map = document.querySelector('.map');
     map.classList.add('map--faded');
     // Удаляем метки
     window.controlPins.removePins();

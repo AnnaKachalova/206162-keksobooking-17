@@ -6,7 +6,6 @@
   var similarAdTemplate = pin.content.querySelector('.map__pin');
   var areaForPoints = document.querySelector('.map__pins');
   var similarAds = [];
-  var errorMessageIsShown = false;
   var error = document.querySelector('#error');
   var errorTemplate = error.content.querySelector('.error');
 
