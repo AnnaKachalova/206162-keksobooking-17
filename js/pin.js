@@ -17,7 +17,7 @@
       window.controlPins.updatePins();
     },
     createPins: function (array) {
-      array.slice(0, 5).forEach(function (ads, index) {
+      array.slice(0, 5).forEach(function (ads) {
         var element = similarAdTemplate.cloneNode(true);
         var widthPin = pin.offsetWidth;
         var heightPin = pin.offsetHeight;
