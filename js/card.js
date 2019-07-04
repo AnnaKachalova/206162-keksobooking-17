@@ -48,8 +48,8 @@
       fillText('.popup__text--capacity', ads.offer.rooms + ' комнаты для ' + ads.offer.guests);
 
       fillText(
-        '.popup__text--capacity',
-        ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
+         '.popup__text--capacity',
+         ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
       );
       fillText('.popup__text--time', ads.offer.checkin + ', выезд до ' + ads.offer.checkout);
       fillText('.popup__description', ads.offer.description);

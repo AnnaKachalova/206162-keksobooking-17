@@ -12,7 +12,6 @@
       similarAds = data;
 
       window.controlPins.updatePins();
-      //window.controlCard.createCard(similarAds);
     },
     createPins: function (array) {
       array.slice(0, 5).forEach(function (ads, index) {
