@@ -5,6 +5,7 @@
   var mapFilterForm = document.querySelector('.map__filters');
   var mapFiltersFields = mapFilterForm.children;
   var mapPin = document.querySelector('.map__pin--main');
+  map.querySelector('.map__filters').style.opacity = 0;
 
   // Заполняем адрес текущими координатами метки
   var MAP_PIN_WIDTH = mapPin.offsetWidth;

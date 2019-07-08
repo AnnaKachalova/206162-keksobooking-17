@@ -17,8 +17,9 @@
     }
   };
 
-  // Работа с формами
-  // Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
+  //------ Работа с полями формамы-------
+
+  // Поля 'Тип жилья' и 'Цена за ночь'
   var notice = document.querySelector('.notice');
   var fieldHousingType = notice.querySelector('#type');
   var minValuesForPrice = [0, 1000, 5000, 10000];
@@ -33,7 +34,7 @@
   };
   fieldHousingType.addEventListener('change', onChangeSelect);
 
-  // Поля «Время заезда», «Время выезда»
+  // Поля 'Время заезда' и 'Время выезда'
   var fieldTimein = notice.querySelector('#timein');
   var fieldTimeOut = notice.querySelector('#timeout');
 
@@ -47,10 +48,10 @@
   fieldTimein.addEventListener('change', onChangeTime);
   fieldTimeOut.addEventListener('change', onChangeTime);
 
-  // «Количество комнат», «Количество мест»
+  // Поля 'Количество комнат' и 'Количество мест'
   var fieldQtyRooms = notice.querySelector('#room_number');
   var fieldQtyPlace = notice.querySelector('#capacity');
-  var fieldsQtyPlace = fieldQtyPlace.children;
+  var fieldsQtyPlace = Array.from(fieldQtyPlace.options);
 
   var valuesForQtyRooms = {
     1: [1],
@@ -59,22 +60,35 @@
     100: [0],
   };
 
-  var onChangeQtyRooms = function (evt) {
-    var value = evt.target.value;
-    var arrayОfСorrect = valuesForQtyRooms[value];
-
+  // изменение их видимости полей у fieldQtyPlace
+  var changeVisibilityOptQtyRooms = function (array) {
+    var visibleOpt = [];
     for (var f = 0; f < fieldsQtyPlace.length; f++) {
-      var currentField = fieldsQtyPlace[f];
-      var valueQtyPlace = Number(currentField.value);
-      var isFits = arrayОfСorrect.includes(valueQtyPlace);
+      var field = fieldsQtyPlace[f];
+      var valueQtyPlace = Number(field.value);
+      var isFits = array.includes(valueQtyPlace);
 
-      currentField.style.display = isFits ? 'block' : 'none';
-      currentField.selected = isFits ? true : false;
+      if (isFits) {
+        field.style.display = 'block';
+        visibleOpt.push(field);
+      } else {
+        field.style.display = 'none';
+      }
     }
+    visibleOpt[0].selected = true;
   };
+  changeVisibilityOptQtyRooms(valuesForQtyRooms[1]);
+
+  // для события change у fieldQtyRooms
+  var onChangeQtyRooms = function (evt) {
+    var val = evt.target.value;
+    var arrayОfСorrect = valuesForQtyRooms[val];
+    changeVisibilityOptQtyRooms(arrayОfСorrect);
+  };
+
   fieldQtyRooms.addEventListener('change', onChangeQtyRooms);
 
-  // Отправка формы
+  // ------ Отправка формы -------
   var form = notice.querySelector('.ad-form');
 
   // Сообщение об успешной отправке формы
@@ -136,4 +150,12 @@
     evt.preventDefault();
     window.disabledPage();
   });
+  // ------ Сброс формы ------
+  var resetFormButton = notice.querySelector('.ad-form__reset');
+
+  var onClickResetFormButton = function () {
+    window.disabledPage();
+    resetFormButton.removeEventListener('click', onClickResetFormButton);
+  };
+  resetFormButton.addEventListener('click', onClickResetFormButton);
 })();
