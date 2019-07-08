@@ -25,12 +25,12 @@
   };
 
   window.controlCard = {
-    createCard: function (ads) {
+    createCard: function (clickedItem, ads) {
       // Проверяем что карта уже создана, если открыта удаляем
       if (hasCard) {
         window.controlCard.removeCard();
       }
-
+      clickedItem.classList.add('.map__pin--active');
       // создаем новую карту
       var element = similarCardTemplate.cloneNode(true);
 
@@ -48,8 +48,8 @@
       fillText('.popup__text--capacity', ads.offer.rooms + ' комнаты для ' + ads.offer.guests);
 
       fillText(
-          '.popup__text--capacity',
-          ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
+        '.popup__text--capacity',
+        ads.offer.rooms + ' комнаты для ' + ads.offer.guests + ' гостей'
       );
       fillText('.popup__text--time', ads.offer.checkin + ', выезд до ' + ads.offer.checkout);
       fillText('.popup__description', ads.offer.description);
@@ -85,19 +85,26 @@
 
       map.insertBefore(documentFragment, mapFilter);
 
-      // События работы с объявлением
-      // Закртытие
+      // Событие закрытия объявления
+      var onKeydownCard = function (evt) {
+        window.util.isEscEvent(evt, window.controlCard.removeCard);
+        document.removeEventListener('keydown', onKeydownCard);
+      };
+      document.addEventListener('keydown', onKeydownCard);
       var buttonClose = element.querySelector('.popup__close');
       buttonClose.addEventListener('click', function () {
         window.controlCard.removeCard();
       });
-
-      document.addEventListener('keydown', function (evt) {
-        window.util.isEscEvent(evt, window.controlCard.removeCard);
-      });
     },
     removeCard: function () {
       if (hasCard) {
+        // Убираем классы подсветки у пинов
+        var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+        pins.forEach(function (pin) {
+          pin.classList.remove('.map__pin--active');
+        });
+
+        // Удадяем карту
         var adsBlock = document.querySelector('.map__card');
         hasCard = false;
         adsBlock.parentNode.removeChild(adsBlock);

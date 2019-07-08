@@ -2,8 +2,6 @@
 (function () {
   // Блокируем форму с фильтрами добавляя состояние disabled полям
   var map = document.querySelector('.map');
-  var mapFilterForm = document.querySelector('.map__filters');
-  var mapFiltersFields = mapFilterForm.children;
   var mapPin = document.querySelector('.map__pin--main');
   map.querySelector('.map__filters').style.opacity = 0;
 
@@ -55,20 +53,21 @@
 
   // Функция активации страницы
   var activatePage = function () {
+    var filterFormFields = document.querySelectorAll('.map__filters select');
     var adForm = document.querySelector('.ad-form');
-    var adFormFields = adForm.children;
+    var adFormFields = document.querySelectorAll('.ad-form fieldset');
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
     // активируем поля формы объявлений
-    for (var j = 0; j < adFormFields.length; j++) {
-      adFormFields[j].disabled = 0;
-    }
+    adFormFields.forEach(function (field) {
+      field.disabled = 0;
+    });
     // активируем поля формы фильтров
-    for (j = 0; j < mapFiltersFields.length; j++) {
-      mapFiltersFields[j].disabled = 0;
-    }
+    filterFormFields.forEach(function (field) {
+      field.disabled = 0;
+    });
   };
 
   // Обработчк перетаскивания

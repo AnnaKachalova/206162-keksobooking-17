@@ -1,20 +1,18 @@
 'use strict';
 (function () {
-  var mapFilterForm = document.querySelector('.map__filters');
-  var mapFiltersFields = mapFilterForm.children;
-  var mapAdForm = document.querySelector('.ad-form');
-  var mapAdFields = mapAdForm.children;
+  var mapFilterForm = document.querySelectorAll('.map__filters select');
+  var mapAdForm = document.querySelectorAll('.ad-form fieldset');
 
   // Функции дизейбла форм
   window.disabledFilterForm = function () {
-    for (var i = 0; i < mapFiltersFields.length; i++) {
-      mapFiltersFields[i].disabled = 1;
-    }
+    mapFilterForm.forEach(function (field) {
+      field.disabled = 1;
+    });
   };
   window.disabledAdForm = function () {
-    for (var i = 0; i < mapAdFields.length; i++) {
-      mapAdFields[i].disabled = 1;
-    }
+    mapAdForm.forEach(function (field) {
+      field.disabled = 1;
+    });
   };
 
   // ------ Работа с полями формамы-------
@@ -32,6 +30,7 @@
     price.min = parseInt(minValue, 10);
     price.placeholder = minValue;
   };
+  onChangeSelect();
   fieldHousingType.addEventListener('change', onChangeSelect);
 
   // Поля 'Время заезда' и 'Время выезда'
@@ -63,8 +62,7 @@
   // изменение их видимости полей у fieldQtyPlace
   var changeVisibilityOptQtyRooms = function (array) {
     var visibleOpt = [];
-    for (var f = 0; f < fieldsQtyPlace.length; f++) {
-      var field = fieldsQtyPlace[f];
+    fieldsQtyPlace.forEach(function (field) {
       var valueQtyPlace = Number(field.value);
       var isFits = array.includes(valueQtyPlace);
 
@@ -74,7 +72,7 @@
       } else {
         field.style.display = 'none';
       }
-    }
+    });
     visibleOpt[0].selected = true;
   };
   changeVisibilityOptQtyRooms(valuesForQtyRooms[1]);

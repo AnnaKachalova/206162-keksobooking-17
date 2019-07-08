@@ -34,13 +34,14 @@
 
         // Событие открытия объявления
         element.addEventListener('click', function () {
-          window.controlCard.createCard(ads);
+          window.controlCard.createCard(element, ads);
         });
       });
       areaForPoints.appendChild(documentFragment);
       document.querySelector('.map__filters').style.opacity = 1;
     },
     updatePins: function () {
+      window.controlCard.removeCard();
       var similarAdsSorted = [];
       similarAdsSorted = similarAds;
 
@@ -107,8 +108,8 @@
         var featuresField = document.querySelector('#housing-features');
         var featuresFields = featuresField.children;
 
-        for (var f = 0; f < featuresFields.length; f++) {
-          var checkBox = featuresFields[f];
+        for (var l = 0; l < featuresFields.length; l++) {
+          var checkBox = featuresFields[l];
 
           if (checkBox.checked) {
             similarAdsSorted = similarAdsSorted.filter(function (ads) {
@@ -148,7 +149,6 @@
       resetButton.addEventListener('click', onResetButtonClick);
     },
     removePins: function () {
-
       var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       pins.forEach(function (currentPin) {
         currentPin.parentNode.removeChild(currentPin);

@@ -36,8 +36,8 @@
   var featuresField = filterForm.querySelector('#housing-features');
   var featuresFields = featuresField.children;
 
-  for (var f = 0; f < featuresFields.length; f++) {
-    var checkBox = featuresFields[f];
+  for (var k = 0; k < featuresFields.length; k++) {
+    var checkBox = featuresFields[k];
     var onClickCheckBox = function () {
       window.controlPins.updatePins();
     };
