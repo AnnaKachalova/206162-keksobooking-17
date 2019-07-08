@@ -19,7 +19,7 @@
     document.querySelector('#address').value = addressY + ' ,' + addressX;
   };
   var startСoordinates = {
-    y: parseInt(MAP_PIN_WIDTH / 2 + MAP_PIN_LEFT, 10),
+    y: parseInt(MAP_PIN_WIDTH / 2 + MAP_PIN_LEFT, 10), 
     x: parseInt(MAP_PIN_HEIGHT / 2 + MAP_PIN_TOP, 10),
   };
 

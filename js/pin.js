@@ -103,17 +103,18 @@
             return ads.offer.guests === Number(guestsField);
           });
         }
-
+        
         // Фильтруем чекбоксы
         var featuresField = document.querySelector('#housing-features');
         var featuresFields = featuresField.children;
 
         for (var f = 0; f < featuresFields.length; f++) {
           var checkBox = featuresFields[f];
+
           if (checkBox.checked) {
             similarAdsSorted = similarAdsSorted.filter(function (ads) {
-              return ads.offer.features.indexOf(checkBox.value) != -1;
-            });
+              return ads.offer.features.indexOf(checkBox.value) !== -1;
+            }); 
           }
         }
         window.controlPins.createPins(similarAdsSorted);
@@ -148,8 +149,8 @@
       resetButton.addEventListener('click', onResetButtonClick);
     },
     removePins: function () {
-      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
+      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       pins.forEach(function (currentPin) {
         currentPin.parentNode.removeChild(currentPin);
       });
