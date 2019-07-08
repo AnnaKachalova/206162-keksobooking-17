@@ -13,7 +13,6 @@
   window.controlPins = {
     successHalder: function (data) {
       similarAds = data;
-
       window.controlPins.updatePins();
     },
     createPins: function (array) {
@@ -26,27 +25,23 @@
 
         element.style = 'left:' + xPin + 'px; top:' + yPin + 'px';
 
-        element.querySelector('img').src = ads.author.avatar;
-        element.querySelector('img').alt = ads.offer.title;
+        // img
+        var img = element.querySelector('img');
+        img.src = ads.author.avatar;
+        img.alt = ads.offer.title;
 
         documentFragment.appendChild(element);
 
-        // События работы с объявлением
-        // открытие
+        // Событие открытия объявления
         element.addEventListener('click', function () {
           window.controlCard.createCard(ads);
         });
       });
       areaForPoints.appendChild(documentFragment);
+      document.querySelector('.map__filters').style.opacity = 1;
     },
     updatePins: function () {
       var similarAdsSorted = [];
-      var priceGradation = {
-        any: [0],
-        low: [0, 10000],
-        middle: [10000, 50000],
-        high: [50000],
-      };
       similarAdsSorted = similarAds;
 
       // Устраняем дребезг
@@ -57,11 +52,18 @@
         // Удаляем все пины
         window.controlPins.removePins();
 
-        var typeOfHousing = document.querySelector('#housing-type').value;
-        var priceField = document.querySelector('#housing-price').value;
-        var roomsField = document.querySelector('#housing-rooms').value;
-        var guestsField = document.querySelector('#housing-guests').value;
+        var getValue = function (selector) {
+          return document.querySelector(selector).value;
+        };
+        var typeOfHousing = getValue('#housing-type');
+        var priceField = getValue('#housing-price');
+        var roomsField = getValue('#housing-rooms');
+        var guestsField = getValue('#housing-guests');
 
+        // Проверяем что есть поле offer
+        similarAdsSorted = similarAds.filter(function (ads) {
+          return ads.offer;
+        });
         // Фильтруем по типу
         if (typeOfHousing !== 'any') {
           similarAdsSorted = similarAds.filter(function (ads) {
@@ -69,6 +71,12 @@
           });
         }
         // Фильтруем по цене
+        var priceGradation = {
+          any: [0],
+          low: [0, 10000],
+          middle: [10000, 50000],
+          high: [50000],
+        };
         if (priceField !== 'any') {
           similarAdsSorted = similarAdsSorted.filter(function (ads) {
             // проверяем что есть верхний предел
@@ -94,6 +102,19 @@
           similarAdsSorted = similarAdsSorted.filter(function (ads) {
             return ads.offer.guests === Number(guestsField);
           });
+        }
+        // Фильтруем чекбоксы
+        var featuresField = document.querySelector('#housing-features');
+        var featuresFields = featuresField.children;
+
+        for (var f = 0; f < featuresFields.length; f++) {
+          var checkBox = featuresFields[f];
+
+          if (checkBox.checked) {
+            similarAdsSorted = similarAdsSorted.filter(function (ads) {
+              return ads.offer.features.indexOf(checkBox.value) !== -1;
+            });
+          }
         }
         window.controlPins.createPins(similarAdsSorted);
       }, 500);
@@ -127,8 +148,8 @@
       resetButton.addEventListener('click', onResetButtonClick);
     },
     removePins: function () {
-      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
 
+      var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
       pins.forEach(function (currentPin) {
         currentPin.parentNode.removeChild(currentPin);
       });

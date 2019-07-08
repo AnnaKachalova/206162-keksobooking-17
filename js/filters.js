@@ -31,4 +31,16 @@
     window.controlPins.updatePins();
   };
   guestsField.addEventListener('change', onGuestsChange);
+
+  // Чекбоксы
+  var featuresField = filterForm.querySelector('#housing-features');
+  var featuresFields = featuresField.children;
+
+  for (var f = 0; f < featuresFields.length; f++) {
+    var checkBox = featuresFields[f];
+    var onClickCheckBox = function () {
+      window.controlPins.updatePins();
+    };
+    checkBox.addEventListener('click', onClickCheckBox);
+  }
 })();
