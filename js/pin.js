@@ -103,7 +103,6 @@
             return ads.offer.guests === Number(guestsField);
           });
         }
-        
         // Фильтруем чекбоксы
         var featuresField = document.querySelector('#housing-features');
         var featuresFields = featuresField.children;
@@ -114,7 +113,7 @@
           if (checkBox.checked) {
             similarAdsSorted = similarAdsSorted.filter(function (ads) {
               return ads.offer.features.indexOf(checkBox.value) !== -1;
-            }); 
+            });
           }
         }
         window.controlPins.createPins(similarAdsSorted);
